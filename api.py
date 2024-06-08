@@ -16,7 +16,7 @@ def decrypt():
         result = process_config(encrypted_content)
         return jsonify({'result': result}), 200
     except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}')}), 500
+        return jsonify({'result': f'Error: {str(e)}'}), 500
 
 @api_bp.route('/decrypt-file', methods=['POST'])
 def decrypt_file_route():
@@ -28,7 +28,7 @@ def decrypt_file_route():
         result = decrypt_file(file_content)
         return jsonify({'result': result}), 200
     except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}')}), 500
+        return jsonify({'result': f'Error: {str(e)}'}), 500
 
 @api_bp.route('/file_sockshttp', methods=['POST'])
 def decrypt_sockshttp_file_route():
@@ -40,7 +40,7 @@ def decrypt_sockshttp_file_route():
         result = file_sockshttp(file_content)
         return jsonify({'result': result}), 200
     except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}')}), 500
+        return jsonify({'result': f'Error: {str(e)}'}), 500
 
 @api_bp.route('/file_opentunnel', methods=['POST'])
 def decrypt_opentunnel_file_route():
@@ -52,4 +52,4 @@ def decrypt_opentunnel_file_route():
         result = tnl_decryptor(file_content)
         return jsonify({'result': result}), 200
     except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}')}), 500
+        return jsonify({'result': f'Error: {str(e)}'}), 500
