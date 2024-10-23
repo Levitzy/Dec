@@ -4,15 +4,15 @@ const apiRouter = require('./api'); // Assuming you have an api.js file for API 
 
 const app = express();
 
-// Middleware to serve static files (e.g., HTML, CSS, JS files from 'public' directory)
-app.use(express.static(path.join(__dirname, 'public')));
+// Middleware to serve static files from the root directory
+app.use(express.static(__dirname)); // Serve static files directly from the root directory
 
 // Use the API routes defined in api.js
 app.use('/api', apiRouter);
 
 // Serve the index.html page for the root route
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'templates', 'index.html')); // Serve the main HTML file
+    res.sendFile(path.join(__dirname, 'index.html')); // Serve index.html from the root directory
 });
 
 // Start the server
