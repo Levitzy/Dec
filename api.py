@@ -1,55 +1,65 @@
-from flask import Blueprint, request, jsonify
-from armod_decryptor import process_config
-from netmod_decryptor import decrypt_file
-from sockshttp_decryptor import file_sockshttp
-from opentunnel_decryptor import tnl_decryptor
+const express = require('express');
+const { processConfig } = require('./armod_decryptor');
+const { decryptFile } = require('./netmod_decryptor');
+const { fileSockshttp } = require('./sockshttp_decryptor');
+const { tnlDecryptor } = require('./opentunnel_decryptor');
 
-api_bp = Blueprint('api', __name__)
+const router = express.Router();
 
-@api_bp.route('/decrypt', methods=['POST'])
-def decrypt():
-    data = request.get_json()
-    encrypted_content = data.get('encryptedContent')
-    if not encrypted_content:
-        return jsonify({'result': 'No encrypted content provided'}), 400
-    try:
-        result = process_config(encrypted_content)
-        return jsonify({'result': result}), 200
-    except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}'}), 500
+// Decrypt API route
+router.post('/decrypt', (req, res) => {
+    const encryptedContent = req.body.encryptedContent;
+    if (!encryptedContent) {
+        return res.status(400).json({ result: 'No encrypted content provided' });
+    }
+    try {
+        const result = processConfig(encryptedContent);
+        return res.status(200).json({ result });
+    } catch (error) {
+        return res.status(500).json({ result: `Error: ${error.message}` });
+    }
+});
 
-@api_bp.route('/decrypt-file', methods=['POST'])
-def decrypt_file_route():
-    data = request.get_json()
-    file_content = data.get('fileContent')
-    if not file_content:
-        return jsonify({'result': 'No file content provided'}), 400
-    try:
-        result = decrypt_file(file_content)
-        return jsonify({'result': result}), 200
-    except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}'}), 500
+// Decrypt file route
+router.post('/decrypt-file', (req, res) => {
+    const fileContent = req.body.fileContent;
+    if (!fileContent) {
+        return res.status(400).json({ result: 'No file content provided' });
+    }
+    try {
+        const result = decryptFile(fileContent);
+        return res.status(200).json({ result });
+    } catch (error) {
+        return res.status(500).json({ result: `Error: ${error.message}` });
+    }
+});
 
-@api_bp.route('/file_sockshttp', methods=['POST'])
-def decrypt_sockshttp_file_route():
-    data = request.get_json()
-    file_content = data.get('fileContent')
-    if not file_content:
-        return jsonify({'result': 'No file content provided'}), 400
-    try:
-        result = file_sockshttp(file_content)
-        return jsonify({'result': result}), 200
-    except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}'}), 500
+// Decrypt sockshttp file route
+router.post('/file_sockshttp', (req, res) => {
+    const fileContent = req.body.fileContent;
+    if (!fileContent) {
+        return res.status(400).json({ result: 'No file content provided' });
+    }
+    try {
+        const result = fileSockshttp(fileContent);
+        return res.status(200).json({ result });
+    } catch (error) {
+        return res.status(500).json({ result: `Error: ${error.message}` });
+    }
+});
 
-@api_bp.route('/file_opentunnel', methods=['POST'])
-def decrypt_opentunnel_file_route():
-    data = request.get_json()
-    file_content = data.get('fileContent')
-    if not file_content:
-        return jsonify({'result': 'No file content provided'}), 400
-    try:
-        result = tnl_decryptor(file_content)
-        return jsonify({'result': result}), 200
-    except Exception as e:
-        return jsonify({'result': f'Error: {str(e)}'}), 500
+// Decrypt opentunnel file route
+router.post('/file_opentunnel', (req, res) => {
+    const fileContent = req.body.fileContent;
+    if (!fileContent) {
+        return res.status(400).json({ result: 'No file content provided' });
+    }
+    try {
+        const result = tnlDecryptor(fileContent);
+        return res.status(200).json({ result });
+    } catch (error) {
+        return res.status(500).json({ result: `Error: ${error.message}` });
+    }
+});
+
+module.exports = router;
