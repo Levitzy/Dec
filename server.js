@@ -12,7 +12,7 @@ app.use('/api', apiRouter);
 
 // Serve the index.html page for the root route
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html')); // Serve the main HTML file
+    res.sendFile(path.join(__dirname, 'templates', 'index.html')); // Serve the main HTML file
 });
 
 // Start the server
