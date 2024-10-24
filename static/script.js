@@ -3,24 +3,30 @@ document.getElementById('options').addEventListener('change', function() {
     const fileSection = document.getElementById('file-section');
     const resultContainer = document.getElementById('result-container');
     const copyPayloadButton = document.getElementById('copy-payload-button');
-    
+
+    // Hide sections
     decryptSection.classList.add('hidden');
     fileSection.classList.add('hidden');
     resultContainer.classList.add('hidden');
     copyPayloadButton.classList.add('hidden');
     resultContainer.classList.remove('visible');
-    
-    if (['armod-vpn', 'netmod-syna', 'sockshttp', 'opentunnel'].includes(this.value)) {
-        copyPayloadButton.classList.remove('hidden');
-    }
-    
-    if (this.value === 'armod-vpn') {
+
+    const selectedOption = this.value;
+
+    // Show the correct section based on the selected option
+    if (selectedOption === 'armod-vpn') {
         decryptSection.classList.remove('hidden');
-    } else if (['netmod-syna', 'sockshttp', 'opentunnel'].includes(this.value)) {
+    } else if (['netmod-syna', 'sockshttp', 'opentunnel'].includes(selectedOption)) {
         fileSection.classList.remove('hidden');
+    }
+
+    // Allow copying the payload if one of the relevant options is selected
+    if (selectedOption) {
+        copyPayloadButton.classList.remove('hidden');
     }
 });
 
+// Handle decryption button click
 document.getElementById('decrypt-button').addEventListener('click', function() {
     const encryptedContent = document.getElementById('encrypted-content').value;
     fetch('/decrypt', {
@@ -42,6 +48,7 @@ document.getElementById('decrypt-button').addEventListener('click', function() {
     });
 });
 
+// Handle file input change
 document.getElementById('file-input').addEventListener('change', function() {
     const file = this.files[0];
     if (file) {
@@ -81,10 +88,11 @@ document.getElementById('file-input').addEventListener('change', function() {
     }
 });
 
+// Copy payload button logic
 document.getElementById('copy-payload-button').addEventListener('click', function() {
     const resultText = document.getElementById('result').textContent;
     let payloadMatch;
-    
+
     switch (document.getElementById('options').value) {
         case 'armod-vpn':
             payloadMatch = resultText.match(/payload=(.*?)(\n|$)/);
@@ -101,7 +109,7 @@ document.getElementById('copy-payload-button').addEventListener('click', functio
             payloadMatch = resultText.match(/\[<\/>\] \[proxyPayload\]= (.*?)(\n|$)/);
             break;
     }
-    
+
     if (payloadMatch) {
         const payload = payloadMatch[1];
         navigator.clipboard.writeText(payload).then(() => {
